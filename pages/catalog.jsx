@@ -33,9 +33,13 @@ export default function Catalog() {
     fetchProducts();
   }, []);
 
-  const filteredProducts = filterCategory === 'all' 
-    ? products 
-    : products.filter(p => p.category === filterCategory);
+  const filteredProducts = products.filter(p => {
+    if (filterCategory === 'all') return true;
+    if (filterCategory === 'одяг') {
+      return p.category.includes('футболка') || p.category.includes('худі') || p.category.includes('світшот') || p.category.includes('одяг');
+    }
+    return p.category.includes(filterCategory);
+  });
 
   if (loading) {
     return (
@@ -62,7 +66,7 @@ export default function Catalog() {
             <div className="flex flex-wrap gap-4">
               {[
                 { id: 'all', label: 'Усе' },
-                { id: 'футболка', label: 'Одяг' },
+                { id: 'одяг', label: 'Одяг' },
                 { id: 'шопер', label: 'Шопери' },
                 { id: 'носки', label: 'Носки' }
               ].map((cat) => (
