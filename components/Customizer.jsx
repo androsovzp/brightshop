@@ -113,7 +113,7 @@ const Customizer = ({ onBack }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Mockup Preview Area */}
-          <div className="sticky top-40 w-full max-h-[70vh] lg:max-h-[75vh] aspect-[4/5] bg-[#f7f7f7] rounded-[2rem] overflow-hidden shadow-2xl group flex items-center justify-center border-2 border-gray-100">
+          <div className="lg:sticky lg:top-40 w-full lg:max-h-[75vh] aspect-[4/5] bg-[#f7f7f7] rounded-[2rem] overflow-hidden shadow-2xl group flex items-center justify-center border-2 border-gray-100">
             <img 
               src={currentProduct.image} 
               alt="Mockup" 
