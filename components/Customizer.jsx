@@ -27,7 +27,7 @@ const Customizer = ({ onBack }) => {
     sweatshirt: {
       name: 'Oversized Sweatshirt',
       price: 1600,
-      image: '/photos/white_tshirt_mockup.png', 
+      image: '/photos/white_sweatshirt_mockup.png', 
       printArea: { top: '35%', left: '30%', width: '40%', height: '35%' }
     }
   };
@@ -75,9 +75,7 @@ const Customizer = ({ onBack }) => {
     if (!shopifyProduct) return;
 
     // Find the variant that matches the color name
-    // Our Shopify products have variants like "Біла", "Чорна", etc.
-    // Customizer colors are "Білий", "Чорний", etc.
-    const searchColor = selectedColor.name.substring(0, 4); // "Біли", "Чорн"
+    const searchColor = selectedColor.name.substring(0, 4); 
     const variant = shopifyProduct.variants.edges.find(edge => 
       edge.node.title.includes(searchColor)
     ) || shopifyProduct.variants.edges[0];
@@ -104,17 +102,18 @@ const Customizer = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black pt-32 pb-20">
-      <div className="container mx-auto px-6">
+    <div className="min-h-screen bg-white text-black pt-20 md:pt-32 pb-20">
+      <div className="container mx-auto px-6 max-w-7xl">
         <button 
           onClick={onBack}
-          className="flex items-center gap-2 font-black uppercase text-xs tracking-widest mb-12 hover:text-pink-600 transition-colors"
+          className="flex items-center gap-2 font-black uppercase text-[10px] tracking-widest mb-8 hover:text-pink-600 transition-colors"
         >
-          <ArrowLeft size={16} /> Назад до каталогу
+          <ArrowLeft size={14} /> Назад до каталогу
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <div className="relative aspect-[4/5] bg-[#f0f0f0] rounded-[2rem] overflow-hidden shadow-2xl group flex items-center justify-center border-4 border-black border-dashed">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          {/* Mockup Preview Area */}
+          <div className="sticky top-40 w-full max-h-[70vh] lg:max-h-[75vh] aspect-[4/5] bg-[#f7f7f7] rounded-[2rem] overflow-hidden shadow-2xl group flex items-center justify-center border-2 border-gray-100">
             <img 
               src={currentProduct.image} 
               alt="Mockup" 
@@ -145,29 +144,30 @@ const Customizer = ({ onBack }) => {
 
             {!userImage && (
               <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
-                <div className="bg-white/80 backdrop-blur-md px-8 py-4 rounded-full border-2 border-black font-black uppercase text-sm tracking-tighter shadow-lg">
+                <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full border border-black/10 font-black uppercase text-[10px] tracking-widest shadow-xl text-black">
                   Твій дизайн буде тут ✨
                 </div>
               </div>
             )}
           </div>
 
-          <div className="space-y-12 text-left">
+          {/* Controls Area */}
+          <div className="space-y-10 py-4 overflow-y-auto">
             <div>
-              <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
+              <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4 leading-none">
                 ТВІЙ <span className="text-pink-600 italic">STYLE.</span>
               </h1>
-              <p className="text-xl font-bold italic text-gray-400">Створи мерч, який відображає твій вайб.</p>
+              <p className="text-lg font-bold italic text-gray-400">Створи мерч, який відображає твій вайб.</p>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="font-black uppercase text-xs tracking-widest text-gray-400">1. Оберіть основу</h3>
-              <div className="flex gap-4">
+            <div className="space-y-4">
+              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">1. Оберіть основу</h3>
+              <div className="grid grid-cols-2 gap-4">
                 {Object.keys(products).map(key => (
                   <button
                     key={key}
                     onClick={() => setSelectedProduct(key)}
-                    className={`px-8 py-4 font-black uppercase text-sm tracking-widest transition-all border-4 ${
+                    className={`px-4 py-4 font-black uppercase text-[11px] tracking-widest transition-all border-4 text-center ${
                       selectedProduct === key ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-100 hover:border-black'
                     }`}
                   >
@@ -177,15 +177,15 @@ const Customizer = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="font-black uppercase text-xs tracking-widest text-gray-400">2. Оберіть колір: <span className="text-black">{selectedColor.name}</span></h3>
-              <div className="flex gap-4 flex-wrap">
+            <div className="space-y-4">
+              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">2. Оберіть колір: <span className="text-black">{selectedColor.name}</span></h3>
+              <div className="flex gap-3 flex-wrap">
                 {colors.map(color => (
                   <button
                     key={color.name}
                     onClick={() => setSelectedColor(color)}
                     title={color.name}
-                    className={`w-12 h-12 rounded-full border-4 transition-all scale-100 hover:scale-110 ${
+                    className={`w-10 h-10 rounded-full border-4 transition-all scale-100 hover:scale-110 ${
                       selectedColor.name === color.name ? 'border-pink-600' : 'border-gray-100'
                     }`}
                     style={{ backgroundColor: color.hex }}
@@ -194,31 +194,31 @@ const Customizer = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="font-black uppercase text-xs tracking-widest text-gray-400">2. Завантажте дизайн</h3>
-              <div className="relative h-48 border-4 border-dashed border-gray-200 rounded-[1.5rem] flex flex-col items-center justify-center transition-colors hover:border-pink-600 group cursor-pointer overflow-hidden">
+            <div className="space-y-4">
+              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">3. Завантажте дизайн</h3>
+              <div className="relative h-40 border-2 border-dashed border-gray-200 rounded-[1.5rem] flex flex-col items-center justify-center transition-colors hover:border-pink-600 group cursor-pointer overflow-hidden">
                 <input 
                   type="file" 
                   className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                   accept="image/*"
                   onChange={handleImageUpload}
                 />
-                <Upload size={40} className="mb-4 text-gray-300 group-hover:text-pink-600 transition-colors" />
-                <span className="font-black uppercase text-xs tracking-widest text-gray-400 group-hover:text-black">Click or Drag Image</span>
+                <Upload size={32} className="mb-3 text-gray-300 group-hover:text-pink-600 transition-colors" />
+                <span className="font-black uppercase text-[10px] tracking-widest text-gray-400 group-hover:text-black">Click or Drag Image</span>
               </div>
             </div>
 
             {userImage && (
-              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="font-black uppercase text-xs tracking-widest text-gray-400">3. Налаштуйте вигляд</h3>
-                <div className="grid grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <label className="font-black uppercase text-[10px] tracking-[0.2em] flex items-center gap-2">
-                       <Maximize size={14} /> Розмір: {Math.round(imagePos.scale * 100)}%
+              <div className="space-y-6 pt-6 border-t border-gray-100 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">4. Налаштуйте вигляд</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="font-black uppercase text-[9px] tracking-[0.2em] flex items-center gap-2 text-gray-500">
+                       <Maximize size={12} /> Розмір: {Math.round(imagePos.scale * 100)}%
                     </label>
                     <input 
                       type="range" 
-                      min="0.1" 
+                      min="0.05" 
                       max="0.8" 
                       step="0.01" 
                       value={imagePos.scale}
@@ -226,9 +226,9 @@ const Customizer = ({ onBack }) => {
                       className="w-full accent-pink-600"
                     />
                   </div>
-                  <div className="space-y-4">
-                    <label className="font-black uppercase text-[10px] tracking-[0.2em] flex items-center gap-2">
-                       <RotateCw size={14} /> Поворот: {imagePos.rotation}°
+                  <div className="space-y-3">
+                    <label className="font-black uppercase text-[9px] tracking-[0.2em] flex items-center gap-2 text-gray-500">
+                       <RotateCw size={12} /> Поворот: {imagePos.rotation}°
                     </label>
                     <input 
                       type="range" 
@@ -241,27 +241,25 @@ const Customizer = ({ onBack }) => {
                   </div>
                 </div>
                 
-                <div className="flex gap-4">
-                  <button 
-                    onClick={() => setUserImage(null)}
-                    className="flex-1 bg-gray-100 hover:bg-red-500 hover:text-white text-black py-4 font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-2"
-                  >
-                    <Trash2 size={16} /> Видалити
-                  </button>
-                </div>
+                <button 
+                  onClick={() => setUserImage(null)}
+                  className="w-full bg-gray-50 hover:bg-black hover:text-white text-gray-400 py-3 font-black uppercase text-[10px] tracking-widest transition-all flex items-center justify-center gap-2 rounded-lg"
+                >
+                  <Trash2 size={14} /> Видалити дизайн
+                </button>
               </div>
             )}
 
             <button 
               disabled={!userImage}
               onClick={handleAddToCart}
-              className={`w-full py-6 font-black uppercase text-xl tracking-widest transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.1)] ${
+              className={`w-full py-6 font-black uppercase text-lg tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl ${
                 userImage 
-                  ? 'bg-pink-600 text-white hover:bg-black hover:scale-[1.02]' 
+                  ? 'bg-pink-600 text-white hover:bg-black hover:scale-[1.01]' 
                   : 'bg-gray-100 text-gray-300 cursor-not-allowed'
               }`}
             >
-              <ShoppingBag size={24} /> Додати в кошик
+              <ShoppingBag size={22} /> Додати в кошик
             </button>
           </div>
         </div>
