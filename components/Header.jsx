@@ -60,7 +60,7 @@ const Header = ({ scrolled, isHome }) => {
           <button className="absolute top-10 right-8 text-white" onClick={() => setIsMenuOpen(false)}>
             <X size={48}/>
           </button>
-          <div className="flex flex-col space-y-12 text-5xl font-black uppercase text-center tracking-tighter italic text-white">
+          <div className="flex flex-col space-y-8 text-3xl font-black uppercase text-center tracking-tighter italic text-white">
             <Link href="/" onClick={() => setIsMenuOpen(false)}>Головна</Link>
             <Link href="/catalog" onClick={() => setIsMenuOpen(false)}>Каталог</Link>
             <Link href="/about" onClick={() => setIsMenuOpen(false)}>Про бренд</Link>
