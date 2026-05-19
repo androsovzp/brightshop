@@ -35,10 +35,19 @@ export default function Catalog() {
 
   const filteredProducts = products.filter(p => {
     if (filterCategory === 'all') return true;
+    
+    const searchString = `${p.category} ${p.title}`.toLowerCase();
+
     if (filterCategory === 'одяг') {
-      return p.category.includes('футболка') || p.category.includes('худі') || p.category.includes('світшот') || p.category.includes('одяг');
+      return searchString.includes('футболка') || searchString.includes('худі') || searchString.includes('світшот') || searchString.includes('одяг') || searchString.includes('t-shirt') || searchString.includes('sweatshirt');
     }
-    return p.category.includes(filterCategory);
+    if (filterCategory === 'шопер') {
+      return searchString.includes('шопер') || searchString.includes('tote') || searchString.includes('bag');
+    }
+    if (filterCategory === 'носки') {
+      return searchString.includes('носки') || searchString.includes('шкарпетки') || searchString.includes('socks');
+    }
+    return searchString.includes(filterCategory);
   });
 
   if (loading) {

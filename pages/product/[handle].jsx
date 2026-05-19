@@ -64,15 +64,19 @@ export default function ProductDetails() {
       <section className="pt-48 pb-32 bg-white text-black">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 text-left">
-            <div className="lg:col-span-7">
-              <div className={`aspect-[4/5] bg-gray-100 relative flex items-center justify-center overflow-hidden rounded-[2rem] shadow-2xl`}>
-                 {product.images.edges[0] ? (
-                   <img src={product.images.edges[0].node.url} alt={product.title} className="absolute inset-0 w-full h-full object-cover" />
-                 ) : (
-                   <div className="text-white font-black text-8xl opacity-10 transform -rotate-12 uppercase tracking-tighter italic">Bright</div>
-                 )}
-                 <span className="absolute top-8 left-8 bg-black text-white px-6 py-2 text-xs font-black uppercase tracking-[0.2em]">NEW</span>
-              </div>
+            <div className="lg:col-span-7 flex flex-col gap-8">
+              {product.images.edges.length > 0 ? (
+                product.images.edges.map((edge, index) => (
+                  <div key={index} className="aspect-[4/5] bg-gray-100 relative flex items-center justify-center overflow-hidden rounded-[2rem] shadow-2xl">
+                    <img src={edge.node.url} alt={`${product.title} - ${index + 1}`} className="absolute inset-0 w-full h-full object-cover" />
+                    {index === 0 && <span className="absolute top-8 left-8 bg-black text-white px-6 py-2 text-xs font-black uppercase tracking-[0.2em]">NEW</span>}
+                  </div>
+                ))
+              ) : (
+                <div className="aspect-[4/5] bg-gray-100 relative flex items-center justify-center overflow-hidden rounded-[2rem] shadow-2xl">
+                  <div className="text-white font-black text-8xl opacity-10 transform -rotate-12 uppercase tracking-tighter italic">Bright</div>
+                </div>
+              )}
             </div>
 
             <div className="lg:col-span-5">
