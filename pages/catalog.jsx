@@ -62,16 +62,16 @@ export default function Catalog() {
 
   return (
     <Layout title="Каталог | BRIGHT SHOP">
-      <section className="pt-48 pb-32 bg-white min-h-screen">
+      <section className="pt-28 pb-16 bg-white min-h-screen">
         <div className="container mx-auto px-6">
-          <div className="mb-20 text-left">
-            <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 text-black">
+          <div className="mb-8 text-left">
+            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-3 text-black">
               УСЕ <span className="text-pink-600">ОДРАЗУ.</span>
             </h1>
-            <p className="text-xl font-bold italic text-gray-400 tracking-tight">Тут немає випадкових речей. Тільки те, що має характер.</p>
+            <p className="text-base font-bold italic text-gray-400 tracking-tight">Тут немає випадкових речей. Тільки те, що має характер.</p>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 border-b-4 border-black pb-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8 border-b-4 border-black pb-4">
             <div className="flex flex-wrap gap-4">
               {[
                 { id: 'all', label: 'Усе' },
@@ -92,7 +92,7 @@ export default function Catalog() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
             {filteredProducts.map((p) => (
               <Link key={p.id} href={`/product/${p.handle}`} className="group cursor-pointer">
                 <div className={`aspect-[4/5] ${p.colorClass} relative overflow-hidden flex items-center justify-center rounded-[1.5rem] shadow-lg group-hover:shadow-2xl transition-all duration-500`}>
@@ -106,8 +106,8 @@ export default function Catalog() {
                     {p.tag}
                   </span>
                 </div>
-                <div className="mt-6 space-y-2 text-left">
-                  <h3 className="font-black uppercase text-lg group-hover:text-pink-600 transition-colors tracking-tight line-clamp-1 text-black">{p.title}</h3>
+                <div className="mt-3 space-y-1 text-left">
+                  <h3 className="font-black uppercase text-base group-hover:text-pink-600 transition-colors tracking-tight line-clamp-1 text-black">{p.title}</h3>
                   <div className="flex justify-between items-center text-left">
                     <span className="text-pink-600 font-black text-xl italic tracking-tighter">{p.price} UAH</span>
                   </div>

@@ -13,6 +13,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     if (!handle) return;
@@ -61,48 +62,61 @@ export default function ProductDetails() {
 
   return (
     <Layout title={`${product.title} | BRIGHT SHOP`}>
-      <section className="pt-48 pb-32 bg-white text-black">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 text-left">
-            <div className="lg:col-span-7 flex flex-col gap-8">
-              {product.images.edges.length > 0 ? (
-                product.images.edges.map((edge, index) => (
-                  <div key={index} className="aspect-[4/5] bg-gray-100 relative flex items-center justify-center overflow-hidden rounded-[2rem] shadow-2xl">
-                    <img src={edge.node.url} alt={`${product.title} - ${index + 1}`} className="absolute inset-0 w-full h-full object-cover" />
-                    {index === 0 && <span className="absolute top-8 left-8 bg-black text-white px-6 py-2 text-xs font-black uppercase tracking-[0.2em]">NEW</span>}
-                  </div>
-                ))
-              ) : (
-                <div className="aspect-[4/5] bg-gray-100 relative flex items-center justify-center overflow-hidden rounded-[2rem] shadow-2xl">
-                  <div className="text-white font-black text-8xl opacity-10 transform -rotate-12 uppercase tracking-tighter italic">Bright</div>
+      <section className="pt-28 pb-16 bg-white text-black">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 text-left">
+            <div className="lg:col-span-5 flex flex-col gap-4">
+              <div className="aspect-[4/5] bg-gray-100 relative flex items-center justify-center overflow-hidden rounded-[1.5rem] shadow-lg">
+                {product.images.edges.length > 0 ? (
+                  <>
+                    <img src={product.images.edges[activeImage]?.node.url || product.images.edges[0]?.node.url} alt={product.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <span className="absolute top-4 left-4 bg-black text-white px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em]">NEW</span>
+                  </>
+                ) : (
+                  <div className="text-white font-black text-6xl opacity-10 transform -rotate-12 uppercase tracking-tighter italic">Bright</div>
+                )}
+              </div>
+              {product.images.edges.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {product.images.edges.map((edge, index) => (
+                    <button 
+                      key={index} 
+                      onClick={() => setActiveImage(index)}
+                      className={`w-20 h-20 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                        activeImage === index ? 'border-pink-600' : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={edge.node.url} alt={`${product.title} - thumb ${index + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
-            <div className="lg:col-span-5">
-              <div className="sticky top-48">
+            <div className="lg:col-span-7">
+              <div className="sticky top-28">
                 <button 
                   onClick={() => router.back()}
-                  className="flex items-center gap-2 font-black uppercase text-[10px] tracking-widest mb-12 hover:text-pink-600 transition-colors"
+                  className="flex items-center gap-2 font-black uppercase text-[10px] tracking-widest mb-6 hover:text-pink-600 transition-colors"
                 >
                   <ArrowLeft size={14} /> Назад
                 </button>
 
-                <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
+                <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-tight mb-4">
                   {product.title}
                 </h1>
-                <div className="text-4xl font-black text-pink-600 mb-12 italic">
+                <div className="text-2xl font-black text-pink-600 mb-6 italic">
                   {product.priceRange.minVariantPrice.amount} UAH
                 </div>
                 
                 <button 
                   onClick={handleAddToCart}
-                  className="w-full bg-pink-600 hover:bg-black text-white py-8 font-black text-2xl uppercase transition-all shadow-[0_20px_40px_rgba(255,0,127,0.3)] mb-12 flex items-center justify-center gap-4 group"
+                  className="w-full bg-pink-600 hover:bg-black text-white py-4 font-black text-base uppercase transition-all shadow-[0_10px_20px_rgba(255,0,127,0.2)] mb-6 flex items-center justify-center gap-2 group"
                 >
-                  ДО КОШИКА <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                  ДО КОШИКА <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
                 
-                <p className="text-gray-500 font-bold italic text-lg leading-relaxed mb-8">"{product.description}"</p>
+                <p className="text-gray-500 font-bold italic text-sm leading-relaxed mb-8">"{product.description}"</p>
               </div>
             </div>
           </div>
