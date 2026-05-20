@@ -39,7 +39,7 @@ export default function Home() {
         <div className="container mx-auto px-6 relative z-10 py-12 text-left">
           <div className="max-w-5xl">
             <h1 className="text-5xl md:text-8xl lg:text-[8rem] xl:text-[9rem] font-black leading-[0.85] tracking-tighter mb-8 uppercase text-white">
-              БУДЬ <br /><span className="text-pink-600 italic outline-text">BRIGHT.</span> <br />БО ТИ <br />ТАК РІШИЛА.
+              ОДЯГ, ЯКИЙ <br /><span className="text-pink-600 italic outline-text">ГОВОРИТЬ</span> <br />ПРО ТЕБЕ.
             </h1>
             <div className="flex flex-wrap gap-6">
               <Link href="/catalog" className="bg-pink-600 hover:bg-white hover:text-black text-white px-12 py-6 font-black text-2xl uppercase transition-all shadow-[0_0_30_px_rgba(255,0,127,0.4)]">
