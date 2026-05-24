@@ -17,8 +17,7 @@ const Customizer = ({ onBack }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const productMappings = {
-    tshirt: 'futbolka-oversayz',
-    sweatshirt: 'svitshot-oversayz'
+    tshirt: 'futbolka-oversayz'
   };
 
   const colors = [
@@ -34,12 +33,6 @@ const Customizer = ({ onBack }) => {
       price: 1100,
       image: '/photos/tshirt-white.webp',
       printArea: { top: '22%', left: '33%', width: '34%', height: '44%' }
-    },
-    sweatshirt: {
-      name: 'Oversized Sweatshirt',
-      price: 1600,
-      image: '/photos/white_sweatshirt_mockup.png', 
-      printArea: { top: '35%', left: '30%', width: '40%', height: '35%' }
     }
   };
 
@@ -47,10 +40,8 @@ const Customizer = ({ onBack }) => {
     const fetchShopifyData = async () => {
       try {
         const tshirtData = await getProduct(productMappings.tshirt);
-        const sweatshirtData = await getProduct(productMappings.sweatshirt);
         setShopifyProducts({
-          tshirt: tshirtData,
-          sweatshirt: sweatshirtData
+          tshirt: tshirtData
         });
       } catch (err) {
         console.error("Error fetching Shopify products for customizer:", err);
@@ -286,24 +277,7 @@ const Customizer = ({ onBack }) => {
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">1. Оберіть основу</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {Object.keys(products).map(key => (
-                  <button
-                    key={key}
-                    onClick={() => setSelectedProduct(key)}
-                    className={`px-4 py-4 font-black uppercase text-[11px] tracking-widest transition-all border-4 text-center rounded-full ${
-                      selectedProduct === key ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-100 hover:border-black'
-                    }`}
-                  >
-                    {products[key].name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">2. Оберіть колір: <span className="text-black">{selectedColor.name}</span></h3>
+              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">1. Оберіть колір: <span className="text-black">{selectedColor.name}</span></h3>
               <div className="flex gap-3 flex-wrap">
                 {colors.map(color => (
                   <button
@@ -320,7 +294,7 @@ const Customizer = ({ onBack }) => {
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">3. Завантажте дизайн</h3>
+              <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">2. Завантажте дизайн</h3>
               <div className="relative h-40 border-2 border-dashed border-gray-200 rounded-[1.5rem] flex flex-col items-center justify-center transition-colors hover:border-pink-600 group cursor-pointer overflow-hidden">
                 <input 
                   type="file" 
@@ -335,7 +309,7 @@ const Customizer = ({ onBack }) => {
 
             {userImage && (
               <div className="space-y-6 pt-6 border-t border-gray-100 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">4. Налаштуйте вигляд</h3>
+                <h3 className="font-black uppercase text-[10px] tracking-widest text-gray-400">3. Налаштуйте вигляд</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-3">
                     <label className="font-black uppercase text-[9px] tracking-[0.2em] flex items-center gap-2 text-gray-500">
