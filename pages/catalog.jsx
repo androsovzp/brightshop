@@ -82,7 +82,7 @@ export default function Catalog() {
                 <button 
                   key={cat.id}
                   onClick={() => setFilterCategory(cat.id)}
-                  className={`px-6 py-2 font-black uppercase text-xs tracking-widest transition-all ${
+                  className={`px-6 py-2 font-black uppercase text-xs tracking-widest transition-all rounded-full ${
                     filterCategory === cat.id ? 'bg-pink-600 text-white' : 'bg-gray-100 hover:bg-black hover:text-white text-black'
                   }`}
                 >

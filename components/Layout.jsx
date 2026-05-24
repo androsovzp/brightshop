@@ -80,7 +80,7 @@ const Layout = ({ children, title = "BRIGHT SHOP | Мерч із характе�
                 </div>
                 <a 
                   href={cart.checkoutUrl}
-                  className="w-full bg-black hover:bg-pink-600 text-white py-6 font-black uppercase text-xl tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl"
+                  className="w-full bg-black hover:bg-pink-600 text-white py-6 font-black uppercase text-xl tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl rounded-full"
                 >
                   ОФОРМИТИ <ExternalLink size={24} />
                 </a>

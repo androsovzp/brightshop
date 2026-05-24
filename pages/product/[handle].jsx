@@ -111,7 +111,7 @@ export default function ProductDetails() {
                 
                 <button 
                   onClick={handleAddToCart}
-                  className="w-full bg-pink-600 hover:bg-black text-white py-4 font-black text-base uppercase transition-all shadow-[0_10px_20px_rgba(255,0,127,0.2)] mb-6 flex items-center justify-center gap-2 group"
+                  className="w-full bg-pink-600 hover:bg-black text-white py-4 font-black text-base uppercase transition-all shadow-[0_10px_20px_rgba(255,0,127,0.2)] mb-6 flex items-center justify-center gap-2 group rounded-full"
                 >
                   ДО КОШИКА <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>

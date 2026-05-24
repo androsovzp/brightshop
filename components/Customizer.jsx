@@ -8,21 +8,32 @@ const Customizer = ({ onBack }) => {
   const [selectedProduct, setSelectedProduct] = useState('tshirt');
   const [selectedColor, setSelectedColor] = useState({ name: 'Білий', hex: '#ffffff' });
   const [userImage, setUserImage] = useState(null);
-  const [imagePos, setImagePos] = useState({ x: 0.5, y: 0.4, scale: 0.25, rotation: 0 });
+  const [imagePos, setImagePos] = useState({ x: 0.5, y: 0.45, scale: 0.25, rotation: 0 });
   const [shopifyProducts, setShopifyProducts] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const containerRef = useRef(null);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   const productMappings = {
     tshirt: 'futbolka-oversayz',
     sweatshirt: 'svitshot-oversayz'
   };
 
+  const colors = [
+    { name: 'Білий', hex: '#ffffff', image: '/photos/tshirt-white.webp' },
+    { name: 'Чорний', hex: '#1a1a1a', image: '/photos/tshirt-black.webp' },
+    { name: 'Рожевий', hex: '#db2777', image: '/photos/tshirt-pink.webp' },
+    { name: 'Червоний', hex: '#ef4444', image: '/photos/tshirt-red.webp' },
+  ];
+
   const products = {
     tshirt: {
       name: 'Premium T-Shirt',
       price: 1100,
-      image: '/photos/white_tshirt_mockup.png',
-      printArea: { top: '30%', left: '35%', width: '30%', height: '40%' }
+      image: '/photos/tshirt-white.webp',
+      printArea: { top: '22%', left: '33%', width: '34%', height: '44%' }
     },
     sweatshirt: {
       name: 'Oversized Sweatshirt',
@@ -31,13 +42,6 @@ const Customizer = ({ onBack }) => {
       printArea: { top: '35%', left: '30%', width: '40%', height: '35%' }
     }
   };
-
-  const colors = [
-    { name: 'Білий', hex: '#ffffff' },
-    { name: 'Чорний', hex: '#1a1a1a' },
-    { name: 'Рожевий', hex: '#db2777' },
-    { name: 'Червоний', hex: '#ef4444' },
-  ];
 
   useEffect(() => {
     const fetchShopifyData = async () => {
@@ -56,6 +60,89 @@ const Customizer = ({ onBack }) => {
     };
     fetchShopifyData();
   }, []);
+
+  // Preload colors for instant switching
+  useEffect(() => {
+    colors.forEach(color => {
+      if (color.image) {
+        const img = new Image();
+        img.src = color.image;
+      }
+    });
+  }, []);
+
+  // Drag-to-reposition logic (Mouse + Touch)
+  const handleDragStart = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    dragStartPos.current = {
+      clientX,
+      clientY,
+      x: imagePos.x,
+      y: imagePos.y
+    };
+  };
+
+  useEffect(() => {
+    const handleDragMove = (e) => {
+      if (!isDragging || !containerRef.current) return;
+      
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      const deltaX = (clientX - dragStartPos.current.clientX) / rect.width;
+      const deltaY = (clientY - dragStartPos.current.clientY) / rect.height;
+      
+      let newX = dragStartPos.current.x + deltaX;
+      let newY = dragStartPos.current.y + deltaY;
+      
+      // Constraint to print area bounds to prevent design from going outside completely
+      const area = selectedProduct === 'tshirt' ? products.tshirt.printArea : products.sweatshirt.printArea;
+      const areaLeft = parseFloat(area.left) / 100;
+      const areaTop = parseFloat(area.top) / 100;
+      const areaWidth = parseFloat(area.width) / 100;
+      const areaHeight = parseFloat(area.height) / 100;
+      
+      const minX = areaLeft;
+      const maxX = areaLeft + areaWidth;
+      const minY = areaTop;
+      const maxY = areaTop + areaHeight;
+      
+      newX = Math.max(minX, Math.min(maxX, newX));
+      newY = Math.max(minY, Math.min(maxY, newY));
+      
+      setImagePos(prev => ({
+        ...prev,
+        x: newX,
+        y: newY
+      }));
+    };
+
+    const handleDragEnd = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleDragMove);
+      window.addEventListener('mouseup', handleDragEnd);
+      window.addEventListener('touchmove', handleDragMove, { passive: false });
+      window.addEventListener('touchend', handleDragEnd);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleDragMove);
+      window.removeEventListener('mouseup', handleDragEnd);
+      window.removeEventListener('touchmove', handleDragMove);
+      window.removeEventListener('touchend', handleDragEnd);
+    };
+  }, [isDragging, imagePos, selectedProduct]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -91,6 +178,14 @@ const Customizer = ({ onBack }) => {
     await addItem(variant.node.id, 1, attributes);
   };
 
+  const getMockupImage = () => {
+    if (selectedProduct === 'tshirt') {
+      const activeColor = colors.find(c => c.name === selectedColor.name) || colors[0];
+      return activeColor.image;
+    }
+    return currentProduct.image;
+  };
+
   const currentProduct = products[selectedProduct];
 
   if (loading) {
@@ -113,20 +208,50 @@ const Customizer = ({ onBack }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Mockup Preview Area */}
-          <div className="lg:sticky lg:top-40 w-full lg:max-h-[75vh] aspect-[4/5] bg-[#f7f7f7] rounded-[2rem] overflow-hidden shadow-2xl group flex items-center justify-center border-2 border-gray-100">
+          <div 
+            ref={containerRef}
+            className="lg:sticky lg:top-40 w-full lg:max-h-[75vh] aspect-[4/5] bg-[#f7f7f7] rounded-[2rem] overflow-hidden shadow-2xl group flex items-center justify-center border-2 border-gray-100 relative"
+          >
             <img 
-              src={currentProduct.image} 
+              src={getMockupImage()} 
               alt="Mockup" 
-              className="w-full h-full object-cover relative z-0"
+              className="w-full h-full object-cover relative z-0 transition-opacity duration-300"
             />
-            <div 
-              className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply transition-colors duration-500"
-              style={{ backgroundColor: selectedColor.hex }}
-            ></div>
+            {selectedProduct !== 'tshirt' && (
+              <div 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply transition-colors duration-500"
+                style={{ backgroundColor: selectedColor.hex }}
+              ></div>
+            )}
+            
+            {/* Visual Print Area Indicator */}
+            {userImage && (
+              <div 
+                className={`absolute border-2 border-dashed transition-all duration-300 pointer-events-none z-10 ${
+                  isDragging ? 'border-pink-600 bg-pink-500/5' : 'border-gray-300/40'
+                }`}
+                style={{
+                  top: currentProduct.printArea.top,
+                  left: currentProduct.printArea.left,
+                  width: currentProduct.printArea.width,
+                  height: currentProduct.printArea.height,
+                }}
+              >
+                <span className={`absolute -top-6 left-2 px-2 py-0.5 rounded text-[8px] tracking-wider uppercase font-black transition-colors ${
+                  isDragging ? 'bg-pink-600 text-white animate-pulse' : 'bg-black/40 text-white'
+                }`}>
+                  Область нанесення
+                </span>
+              </div>
+            )}
             
             {userImage && (
               <div 
-                className="absolute z-20 flex items-center justify-center cursor-move"
+                onMouseDown={handleDragStart}
+                onTouchStart={handleDragStart}
+                className={`absolute z-20 flex items-center justify-center select-none ${
+                  isDragging ? 'cursor-grabbing scale-105' : 'cursor-grab hover:scale-[1.02]'
+                } transition-transform duration-150`}
                 style={{
                   top: `${imagePos.y * 100}%`,
                   left: `${imagePos.x * 100}%`,
@@ -137,7 +262,7 @@ const Customizer = ({ onBack }) => {
                 <img 
                   src={userImage} 
                   alt="Your Design" 
-                  className="w-full h-auto drop-shadow-xl opacity-90"
+                  className="w-full h-auto drop-shadow-xl opacity-95 pointer-events-none"
                 />
               </div>
             )}
@@ -167,7 +292,7 @@ const Customizer = ({ onBack }) => {
                   <button
                     key={key}
                     onClick={() => setSelectedProduct(key)}
-                    className={`px-4 py-4 font-black uppercase text-[11px] tracking-widest transition-all border-4 text-center ${
+                    className={`px-4 py-4 font-black uppercase text-[11px] tracking-widest transition-all border-4 text-center rounded-full ${
                       selectedProduct === key ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-100 hover:border-black'
                     }`}
                   >
@@ -243,7 +368,7 @@ const Customizer = ({ onBack }) => {
                 
                 <button 
                   onClick={() => setUserImage(null)}
-                  className="w-full bg-gray-50 hover:bg-black hover:text-white text-gray-400 py-3 font-black uppercase text-[10px] tracking-widest transition-all flex items-center justify-center gap-2 rounded-lg"
+                  className="w-full bg-gray-50 hover:bg-black hover:text-white text-gray-400 py-3 font-black uppercase text-[10px] tracking-widest transition-all flex items-center justify-center gap-2 rounded-full"
                 >
                   <Trash2 size={14} /> Видалити дизайн
                 </button>
@@ -253,7 +378,7 @@ const Customizer = ({ onBack }) => {
             <button 
               disabled={!userImage}
               onClick={handleAddToCart}
-              className={`w-full py-6 font-black uppercase text-lg tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl ${
+              className={`w-full py-6 font-black uppercase text-lg tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl rounded-full ${
                 userImage 
                   ? 'bg-pink-600 text-white hover:bg-black hover:scale-[1.01]' 
                   : 'bg-gray-100 text-gray-300 cursor-not-allowed'

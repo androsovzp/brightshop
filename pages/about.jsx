@@ -27,8 +27,8 @@ export default function About() {
                 ФІЛОСОФІЯ <span className="text-pink-600 italic">BRIGHT.</span>
               </h2>
               <div className="space-y-6 text-xl font-bold italic text-gray-500 tracking-tight leading-relaxed">
-                <p>Тут немає місця нудьзі та сірим правилам. Ми створили цей бренд для дівчат, які самі вирішують, яким буде їхній день.</p>
-                <p>Кожна річ у нашому каталозі — це не просто тканина. Це інструмент твого самовираження. Це твій характер, вишитий на світшоті або надрукований на футболці.</p>
+                <p>Тут немає місця правилам. Ми створили цей бренд для людей, які самі вирішують, яким буде їхній день. Що речі будуть говорити про них!</p>
+                <p>Кожна річ у нашому каталозі — це не просто тканина. Це інструмент твого самовираження. Якість, стиль, маніфест!</p>
               </div>
               <div className="grid grid-cols-2 gap-8 pt-8">
                 <div>
@@ -79,7 +79,7 @@ export default function About() {
             ГОТОВА БУТИ <br /><span className="italic outline-text-white">BRIGHT?</span>
           </h2>
           <div className="flex flex-wrap justify-center gap-6">
-            <Link href="/catalog" className="bg-black text-white px-12 py-6 font-black text-2xl uppercase hover:bg-white hover:text-pink-600 transition-all shadow-2xl">
+            <Link href="/catalog" className="bg-black text-white px-12 py-6 font-black text-2xl uppercase hover:bg-white hover:text-pink-600 transition-all shadow-2xl rounded-full">
               У КАТАЛОГ 🔥
             </Link>
           </div>

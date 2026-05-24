@@ -42,10 +42,10 @@ export default function Home() {
               ОДЯГ, ЯКИЙ <br /><span className="text-pink-600 italic outline-text">ГОВОРИТЬ</span> <br />ПРО ТЕБЕ.
             </h1>
             <div className="flex flex-wrap gap-6">
-              <Link href="/catalog" className="bg-pink-600 hover:bg-white hover:text-black text-white px-12 py-6 font-black text-2xl uppercase transition-all shadow-[0_0_30_px_rgba(255,0,127,0.4)]">
+              <Link href="/catalog" className="bg-pink-600 hover:bg-white hover:text-black text-white px-12 py-6 font-black text-2xl uppercase transition-all shadow-[0_0_30_px_rgba(255,0,127,0.4)] rounded-full">
                 КАТАЛОГ 🔥
               </Link>
-              <Link href="/customizer" className="bg-white hover:bg-pink-600 hover:text-white text-black px-12 py-6 font-black text-2xl uppercase transition-all border-4 border-black">
+              <Link href="/customizer" className="bg-white hover:bg-pink-600 hover:text-white text-black px-12 py-6 font-black text-2xl uppercase transition-all border-4 border-black rounded-full">
                 ТВІЙ ДИЗАЙН ✨
               </Link>
             </div>
@@ -59,7 +59,7 @@ export default function Home() {
           <div className="flex justify-between items-end mb-16">
             <div>
               <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">НОВИЙ ДРОП.</h2>
-              <p className="text-gray-400 font-bold italic tracking-tight">Те, що ти шукала, вже тут.</p>
+              <p className="text-gray-400 font-bold italic tracking-tight">Те, що шукаєш.</p>
             </div>
             <Link href="/catalog" className="hidden md:flex items-center gap-2 font-black uppercase text-xs tracking-widest hover:text-pink-600 transition-colors">
               ДИВИТИСЬ УСЕ <ArrowRight size={16} />
