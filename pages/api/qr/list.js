@@ -12,7 +12,16 @@ export default async function handler(req, res) {
   }
 
   if (!db) {
-    return res.status(500).json({ error: 'Firebase Admin not initialized' });
+    const diagnostic = {
+      hasServiceAccount: !!process.env.FIREBASE_SERVICE_ACCOUNT,
+      hasPrivateKey: !!process.env.FIREBASE_PRIVATE_KEY,
+      hasClientEmail: !!process.env.FIREBASE_CLIENT_EMAIL,
+      serviceAccountLength: process.env.FIREBASE_SERVICE_ACCOUNT ? process.env.FIREBASE_SERVICE_ACCOUNT.length : 0,
+      envKeys: Object.keys(process.env).filter(k => k.includes('FIREBASE') || k.includes('ADMIN')),
+    };
+    return res.status(500).json({ 
+      error: `Firebase Admin not initialized. Diagnostics: ${JSON.stringify(diagnostic)}`
+    });
   }
 
   try {
