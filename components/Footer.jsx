@@ -15,6 +15,7 @@ const Footer = () => {
             <ul className="space-y-4 font-black uppercase text-sm italic tracking-tight">
               <li><Link href="/" className="hover:text-pink-600">Головна</Link></li>
               <li><Link href="/catalog" className="hover:text-pink-600">Каталог</Link></li>
+              <li><Link href="/look" className="hover:text-pink-600">Цифровий мерч</Link></li>
               <li><Link href="/about" className="hover:text-pink-600">Про нас</Link></li>
               <li><Link href="/customizer" className="hover:text-pink-600">Свій дизайн</Link></li>
             </ul>

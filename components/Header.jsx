@@ -29,9 +29,10 @@ const Header = ({ scrolled, isHome }) => {
             BRIGHT<span className={scrolled || !isHome ? 'text-black' : 'text-white'}>SHOP</span>
           </Link>
           
-          <div className="hidden md:flex space-x-10 font-black uppercase text-xs tracking-[0.2em] text-current">
+          <div className="hidden md:flex space-x-10 font-black uppercase text-xs tracking-[0.2em] text-current items-center">
             <Link href="/" className="hover:text-pink-600 transition-all">Головна</Link>
             <Link href="/catalog" className="hover:text-pink-600 transition-all">Каталог</Link>
+            <Link href="/look" className="hover:text-pink-600 transition-all text-pink-600 font-extrabold">Цифровий мерч ⚡️</Link>
             <Link href="/about" className="hover:text-pink-600 transition-colors">Про бренд</Link>
             <Link href="/customizer" className="bg-white text-black px-4 py-1 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-pink-600 hover:text-white transition-all">
               Свій дизайн ✨
@@ -63,6 +64,7 @@ const Header = ({ scrolled, isHome }) => {
           <div className="flex flex-col space-y-8 text-3xl font-black uppercase text-center tracking-tighter italic text-white">
             <Link href="/" onClick={() => setIsMenuOpen(false)}>Головна</Link>
             <Link href="/catalog" onClick={() => setIsMenuOpen(false)}>Каталог</Link>
+            <Link href="/look" onClick={() => setIsMenuOpen(false)} className="text-pink-500">Цифровий мерч ⚡️</Link>
             <Link href="/about" onClick={() => setIsMenuOpen(false)}>Про бренд</Link>
             <Link href="/customizer" onClick={() => setIsMenuOpen(false)} className="text-pink-600">Свій дизайн ✨</Link>
           </div>
