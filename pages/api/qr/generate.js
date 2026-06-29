@@ -1,6 +1,6 @@
 import { db } from '../../../lib/firebase-admin';
-import qrCode from 'qrcode';
 import crypto from 'crypto';
+import { generateStyledSVGDataUrl } from '../../../lib/qr-generator';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -23,15 +23,8 @@ export default async function handler(req, res) {
     const protocol = req.headers['x-forwarded-proto'] || 'http';
     const url = `${protocol}://${host}/p/${uuid}`;
 
-    // Generate QR code as Base64 Data URL
-    const qrDataUrl = await qrCode.toDataURL(url, {
-      width: 400,
-      margin: 2,
-      color: {
-        dark: '#000000',
-        light: '#ffffff',
-      },
-    });
+    // Generate styled QR code Data URL
+    const qrDataUrl = generateStyledSVGDataUrl(url);
 
     // Save to Firestore
     const qrRef = db.collection('qrcodes').doc(uuid);

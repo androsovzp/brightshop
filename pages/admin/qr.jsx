@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
-import { QrCode, Download, ExternalLink, Lock, Loader2, Check, Copy, Edit3, X } from 'lucide-react';
+import { QrCode, Download, ExternalLink, Lock, Loader2, Check, Copy, Edit3, X, Eye } from 'lucide-react';
+import { downloadStyledQRPNG, generateStyledSVGDataUrl } from '../../lib/qr-generator';
 
 export default function AdminQR() {
   const [password, setPassword] = useState('');
@@ -11,10 +12,11 @@ export default function AdminQR() {
   const [error, setError] = useState('');
   const [copiedId, setCopiedId] = useState(null);
 
-  // Inline edit state
+  // Inline edit & preview state
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState('');
   const [savingName, setSavingName] = useState(false);
+  const [previewData, setPreviewData] = useState(null);
 
   // Check localStorage for saved password
   useEffect(() => {
@@ -288,9 +290,19 @@ export default function AdminQR() {
                         <tr key={qr.id} className="hover:bg-pink-900/20 transition-colors">
                           <td className="p-6">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-white/10 text-white border border-white/20 rounded flex items-center justify-center font-bold text-xs select-none">
+                              <button 
+                                onClick={() => {
+                                  setPreviewData({
+                                    id: qr.id,
+                                    url: profileUrl,
+                                    svgDataUrl: generateStyledSVGDataUrl(profileUrl)
+                                  });
+                                }}
+                                className="w-9 h-9 bg-white/10 hover:bg-white text-white border border-white/20 hover:text-black rounded-xl flex items-center justify-center font-bold text-xs transition-all cursor-pointer shadow-sm"
+                                title="Натисніть для перегляду QR"
+                              >
                                 QR
-                              </div>
+                              </button>
                               <div>
                                 <div className="font-mono text-sm flex items-center gap-2">
                                   <span className="text-white">{qr.id.substring(0, 18)}...</span>
@@ -381,18 +393,26 @@ export default function AdminQR() {
                             )}
                           </td>
                           <td className="p-6 text-right">
-                            <div className="flex justify-end gap-3">
+                            <div className="flex justify-end gap-2">
                               <button
-                                onClick={async () => {
-                                  try {
-                                    const qrCodeLib = require('qrcode');
-                                    const dataUrl = await qrCodeLib.toDataURL(profileUrl, { width: 1000, margin: 2 });
-                                    downloadQR(dataUrl, `qr-brightshop-${qr.id.substring(0,8)}.png`);
-                                  } catch (err) {
-                                    alert('Не вдалося завантажити QR');
-                                  }
+                                onClick={() => {
+                                  setPreviewData({
+                                    id: qr.id,
+                                    url: profileUrl,
+                                    svgDataUrl: generateStyledSVGDataUrl(profileUrl)
+                                  });
                                 }}
-                                className="inline-flex items-center gap-2 bg-pink-950/40 hover:bg-pink-900/60 border border-pink-500/20 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer text-white"
+                                className="inline-flex items-center gap-1.5 bg-pink-900/40 hover:bg-pink-800/60 border border-pink-500/20 px-3 py-2 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer text-white"
+                                title="Переглянути стилізований QR-код"
+                              >
+                                <Eye size={14} /> Прев'ю
+                              </button>
+                              <button
+                                onClick={() => {
+                                  downloadStyledQRPNG(profileUrl, `qr-brightshop-${qr.id.substring(0,8)}.png`);
+                                }}
+                                className="inline-flex items-center gap-1.5 bg-white text-black hover:bg-pink-900 hover:text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md"
+                                title="Завантажити високоякісний стилізований PNG"
                               >
                                 <Download size={14} /> PNG
                               </button>
@@ -409,6 +429,42 @@ export default function AdminQR() {
 
         </div>
       </div>
+
+      {/* PREVIEW MODAL */}
+      {previewData && (
+        <div className="fixed inset-0 z-[500] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-pink-950 border border-pink-500/30 rounded-[32px] p-8 max-w-sm w-full shadow-2xl relative space-y-6 text-center animate-in zoom-in-95">
+            <button 
+              onClick={() => setPreviewData(null)}
+              className="absolute top-4 right-4 text-pink-200 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tighter italic text-white">
+                СТИЛІЗОВАНИЙ QR-КОД
+              </h3>
+              <p className="text-xs text-pink-200/60 font-mono mt-1">ID: {previewData.id.substring(0, 16)}...</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl shadow-2xl flex items-center justify-center mx-auto w-64 h-64 border-4 border-pink-400/30">
+              <img src={previewData.svgDataUrl} alt="Styled QR Code" className="w-full h-full object-contain" />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => {
+                  downloadStyledQRPNG(previewData.url, `qr-brightshop-${previewData.id.substring(0,8)}.png`);
+                }}
+                className="w-full bg-white text-black hover:bg-pink-900 hover:text-white py-3.5 rounded-2xl font-black uppercase text-xs tracking-wider transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Download size={14} /> СКАЧАТИ РЕЗУЛЬТАТ (PNG)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
